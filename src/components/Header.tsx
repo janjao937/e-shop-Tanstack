@@ -1,27 +1,40 @@
 import { Link } from '@tanstack/react-router'
-
-import './Header.css'
+import { ShoppingBag} from 'lucide-react'
 
 export default function Header() {
   return (
-    <header className="header">
-      <nav className="nav">
-        <div className="nav-item">
-          <Link to="/">Home</Link>
-        </div>
+    <>
+      <header className ="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur 
+      dark:border-slate-800 dark:bg-slate-950/80">
+        <div className='mx-auto max-w-6xl px-4 py-3 items-center justify-between flex'>
+          <div className ='flex items-center gap-3'>
+            <Link className = "flex items-center gap-2" to="/">
+              <div className='flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white dark:bg-white dark:text-slate-800'>
+                <ShoppingBag size={20}/>
+              </div>
+            <div className='flex flex-col'>
+                <span className='text-sm font-semiblod text-slate-900 dark:text-white'>E-Shop</span>
+              </div>
+            </Link>
 
-        <div className="px-2 font-bold">
-          <Link to="/demo/start/server-funcs">Start - Server Functions</Link>
+            <nav className ='hidden items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-200 sm:flex'>
+              <Link className='rounded-lg px-3 py-1 transition hover:bg-slate-100 dark:hover:bg-slate-800' to="/">Home</Link>
+              <Link className='rounded-lg px-3 py-1 transition hover:bg-slate-100 dark:hover:bg-slate-800' to="/products">Products</Link>
+              <Link className='rounded-lg px-3 py-1 transition hover:bg-slate-100 dark:hover:bg-slate-800' to="/">Create Product</Link>
+            </nav>
+              
+          </div>
+          <div className='flex items-center gap-2'>
+                <Link className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs
+                font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" to="/">
+                  <span>Cart</span>
+                  <span className='flex h-6 min-w-6 items-center justify-center rounded-full bg-slate-900 text-xs text-white 
+                  text-[11px] font-bold'>0</span>
+                  <span className='hidden text-[11px] font-medium text-slate-500 sm:inline'>฿10</span>
+                </Link>
+          </div>
         </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/start/api-request">Start - API Request</Link>
-        </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/start/ssr">Start - SSR Demos</Link>
-        </div>
-      </nav>
-    </header>
+      </header>
+    </>
   )
 }
