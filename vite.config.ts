@@ -1,11 +1,12 @@
-  import { defineConfig } from 'vite'
-  import { devtools } from '@tanstack/devtools-vite'
-  import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-  import viteReact from '@vitejs/plugin-react'
-  import viteTsConfigPaths from 'vite-tsconfig-paths'
-  import { fileURLToPath, URL } from 'url'
-  import { nitro } from 'nitro/vite'
+import { defineConfig } from 'vite'
+import { devtools } from '@tanstack/devtools-vite'
+import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import viteReact from '@vitejs/plugin-react'
+import viteTsConfigPaths from 'vite-tsconfig-paths'
+import { fileURLToPath, URL } from 'url'
+import { nitro } from 'nitro/vite'
 import tanstackRouter from '@tanstack/router-plugin/vite'
+import tailwindcss from '@tailwindcss/vite'
 
   const config = defineConfig({
     resolve: {
@@ -20,7 +21,7 @@ import tanstackRouter from '@tanstack/router-plugin/vite'
       viteTsConfigPaths({
         projects: ['./tsconfig.json'],
       }),
-
+      tailwindcss(),
       tanstackRouter(),
       tanstackStart(),
       viteReact(),
