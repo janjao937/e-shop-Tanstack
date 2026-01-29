@@ -2,6 +2,12 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRightIcon } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { sampleProducts } from '@/db/seed';
+// import { createServerFn } from "@tanstack/react-start";
+
+// export const getServerTime = createServerFn({method: "GET"}).handler(
+//   async () => {
+//     return new Date().toISOString();
+// });
 
 export const Route = createFileRoute("/")({
   component: App,
