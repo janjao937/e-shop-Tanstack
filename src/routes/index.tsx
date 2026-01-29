@@ -1,18 +1,30 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRightIcon } from 'lucide-react'
-import { Card, CardDescription, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { sampleProducts } from '@/db/seed';
 
-export const Route = createFileRoute("/")({component: App })
+export const Route = createFileRoute("/")({
+  component: App,
+  loader: async () =>{
+    // const res = await fetch("https://fakestoreapi.com/products");
+    // const data = await res.json();
+    // // console.log(data[0]);
+    // return {products:data};
+    return {products: sampleProducts.slice(0,6)};
+  }
+})
 
 function App() {
+  const {products} = Route.useLoaderData();
+
   return (
     <div className='space-y-12 bg-linear-to-b from-slate-50 via-white to-slate-50 p-6'>
       <section>
       <Card className='p-8 shadow-md bg-white/80'>
-        <p className='text-sm font-semibold uppercase tracking-wide text-blue-600'>Your favorite e-commerce store</p>
+        <p className='text-sm font-semibold uppercase tracking-wide text-blue-600'>Your favorite development services</p>
         <CardTitle className='text-4xl font-bold leading-tight text-slate-900 dark:text-white
         max-w-2xl'>
-          <h1>E-Shop - Your one-stop shop for all you need</h1>
+          <h1>E-Shop - Everything you need in development services</h1>
         </CardTitle>
         <CardDescription>
           <Link to= "/products" className='inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 
@@ -22,6 +34,41 @@ function App() {
           </Link>
         </CardDescription>
       </Card>
+      </section>
+
+      <section>
+        <Card className='p-8 shadow-md bg-white/80'>
+          <div className='flex items-center justify-between'>
+            <div>
+              <CardHeader className='px-0'>
+                <p className='text-sm font-semibold uppercase tracking-wide text-blue-600'>Recommended</p>
+                <CardTitle className='text-2xl font-semibold text-slate-900'>Starter Service price</CardTitle>
+              </CardHeader>
+              <CardDescription className='text-sm text-slate-600'>
+                Curated items to try cart and detail pages quickly
+              </CardDescription>
+            </div>
+            <div>
+              <Link to= "/products" className='hidden items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-700
+              sm:inline-flex transition hover:-translate-0.5 hover:shadow-xl'>
+                View All <ArrowRightIcon size= {14}/>
+              </Link>
+            </div> 
+          </div>   
+        </Card>
+
+        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+          {
+            products.map((product: any, index: number) => {
+             return <Card key={`product-${index}`}>
+                <CardHeader>
+                  <CardTitle>{product.name}</CardTitle>
+                </CardHeader>
+                <CardContent>{product.description}</CardContent>
+              </Card>
+            })
+          }
+        </div>
       </section>
     </div>
   )
