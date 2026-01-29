@@ -67,6 +67,6 @@ export const sampleProducts = [
     rating: "5.0",
     reviews: 200,
     image: "/tanstack-circle-logo.png",
-    inventory: "in-stock"
+    inventory: "backorder"
   },
 ]

@@ -2,9 +2,10 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRightIcon } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { sampleProducts } from '@/db/seed';
+import { ProductCard } from '@/components/ProductCard';
 // import { createServerFn } from "@tanstack/react-start";
 
-// export const getServerTime = createServerFn({method: "GET"}).handler(
+// export const getServerTme = createServerFn({method: "GET"}).handler(
 //   async () => {
 //     return new Date().toISOString();
 // });
@@ -42,8 +43,8 @@ function App() {
       </Card>
       </section>
 
-      <section>
-        <Card className='p-8 shadow-md bg-white/80'>
+      <section className='space-y-4 max-w-6xl mx-auto rounded-2xl'>
+        <Card className='p-6 shadow-md bg-white/80'>
           <div className='flex items-center justify-between'>
             <div>
               <CardHeader className='px-0'>
@@ -64,16 +65,9 @@ function App() {
         </Card>
 
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-          {
-            products.map((product: any, index: number) => {
-             return <Card key={`product-${index}`}>
-                <CardHeader>
-                  <CardTitle>{product.name}</CardTitle>
-                </CardHeader>
-                <CardContent>{product.description}</CardContent>
-              </Card>
-            })
-          }
+          {products.map((product: any, index: number) => {
+             return <ProductCard key = {index} product = {product}/>
+          })}
         </div>
       </section>
     </div>
