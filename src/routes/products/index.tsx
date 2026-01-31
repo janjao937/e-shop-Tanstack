@@ -8,8 +8,9 @@ const fetchProduct = createServerFn({method:"GET"}).handler(async () => samplePr
 
 const loggerMiddleware = createMiddleware().server(async({request, next})=>{
   console.log(`---logging middleware---${request.url} from ${request.headers.get("origin")}`);
-  return next()
-})
+  return next();
+});
+
 export const Route = createFileRoute('/products/')({
   component: RouteComponent,
   loader: async() => {
