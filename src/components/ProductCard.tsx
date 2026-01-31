@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card"
 import { Button } from "./ui/button"
 import { ShoppingBagIcon } from "lucide-react"
 import { Link } from '@tanstack/react-router'
@@ -30,7 +30,7 @@ export function ProductCard ({product}: {
           </div>
           <CardTitle className="text-lg font-semibold">{product.name}</CardTitle>
           <CardDescription>{product.description}</CardDescription>
-          {/* <CardAction>฿{product.price}</CardAction> */}
+
         </CardHeader>
         <CardContent className="flex items-center justify-between">
           <p className="flex items-center gap-2 text-sm text-slate-600">

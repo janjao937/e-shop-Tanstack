@@ -1,15 +1,62 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { ProductCard } from '@/components/ProductCard'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { sampleProducts } from '@/db/seed'
+import { createFileRoute } from '@tanstack/react-router'
+import { createServerFn, json } from '@tanstack/react-start'
+
+const fetchProduct = createServerFn({method:"GET"}).handler(async () => sampleProducts);
 
 export const Route = createFileRoute('/products/')({
   component: RouteComponent,
-})
+  loader: async() => {
+    return fetchProduct();
+  },
+  server:{
+    middleware: [],
+    handlers: {
+      POST: async({request})=>{
+        let body = null;
+        try {
+          body = await request.json();
+        } catch {
+          body = null;
+        }
+        return json({ message: "Hello from post request", body });
+      }
+    }
+  }
+});
+
 
 function RouteComponent() {
+  const products = Route.useLoaderData();
   return (
-    <div className='flex'>
-    <Link to="/products/$id" params = {{id:1}}>Go to product 1</Link>
-    <Link to="/products/$id" params = {{id:2}}>Go to product 2</Link>
-    <Link to="/products/$id" params = {{id:3}}>Go to product 3</Link>
+    <div className='space-y-6'>
+      <section className='space-y-4 max-w-6xl mx-auto'>
+        <Card className='p-6 shadow-md bg-white/80'>
+          <div className='flex items-center justify-between'>
+            <div className='space-y-1'>
+              <CardHeader className='px-0'>
+                <p className='text-sm uppercase tracking-wide text-slate-500'>Recommended</p>
+                <CardTitle className='text-2xl font-semibold'>Starter Service price</CardTitle>
+              </CardHeader>
+              <CardDescription className='text-sm text-slate-600'>
+                Curated items to try cart and detail pages quickly
+              </CardDescription>
+            </div>
+          </div>   
+        </Card>
+      </section>
+      <section>
+        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+          {
+            products.map((product, index) => {
+            return <ProductCard key={`product-${index}`} product = {product}/>
+          })
+        }
+        </div>
+
+      </section>
     </div>
   )
 }

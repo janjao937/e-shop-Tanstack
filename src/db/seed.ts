@@ -1,7 +1,7 @@
 export const sampleProducts = [
   {
     name: "Singleplayer Game",
-    description: "singleplayer game 3D,2D",
+    description: "Immersive singleplayer experience with both 3D and 2D gameplay modes.",
     price: "15,000.00",
     bage: "New",
     rating: "4.8",
@@ -10,8 +10,8 @@ export const sampleProducts = [
     inventory: "in-stock"
   },
   {
-    name: "Sample multiplayer game",
-    description: "multiplayer game 3D,2D | Leaderboard Turnbase",
+    name: "Sample Multiplayer Game",
+    description: "Engaging multiplayer adventure featuring 3D and 2D modes with leaderboard and turn-based mechanics.",
     price: "25,000.00",
     bage: "New",
     rating: "4.8",
@@ -20,18 +20,18 @@ export const sampleProducts = [
     inventory: "in-stock"
   },
   {
-    name: "Realtime multiplayer game",
-    description: "Realtime multiplayer game 3D,2D | protocal: resapi, websocket",
+    name: "Realtime Multiplayer Game",
+    description: "Fast-paced realtime multiplayer with 3D and 2D gameplay, powered by REST API and WebSocket protocols.",
     price: "30,000.00",
     bage: "New",
     rating: "4.8",
     reviews: 20,
     image: "/tanstack-circle-logo.png",
-    inventory: "in-stock"
+    inventory: "backorder"
   },
   {
-    name: "Software architecture design",
-    description: "Design sofware monolint, Microservice",
+    name: "Software Architecture Design",
+    description: "Professional design services for monolithic and microservice architectures, tailored to your project needs.",
     price: "5,000.00",
     bage: "New",
     rating: "4.8",
@@ -41,7 +41,7 @@ export const sampleProducts = [
   },
   {
     name: "Backend",
-    description: "api| db",
+    description: "Robust backend development covering APIs and database integration for scalable applications.",
     price: "30,000.00",
     bage: "New",
     rating: "4.8",
@@ -51,7 +51,7 @@ export const sampleProducts = [
   },
   {
     name: "Frontend",
-    description: "Frontend Webapp app",
+    description: "Modern frontend development for responsive web and mobile applications with intuitive UI/UX.",
     price: "25,000.00",
     bage: "New",
     rating: "4.8",
@@ -61,7 +61,7 @@ export const sampleProducts = [
   },
   {
     name: "Fullstack",
-    description: "End-to-End Fullstack web or app, api, db, software architecture design",
+    description: "Comprehensive end-to-end fullstack solutions including frontend, backend, APIs, databases, and architecture design.",
     price: "50,000.00",
     bage: "New",
     rating: "5.0",

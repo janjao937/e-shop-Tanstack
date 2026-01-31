@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRightIcon } from 'lucide-react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { sampleProducts } from '@/db/seed';
 import { ProductCard } from '@/components/ProductCard';
 // import { createServerFn } from "@tanstack/react-start";
@@ -27,20 +27,20 @@ function App() {
   return (
     <div className='space-y-12 bg-linear-to-b from-slate-50 via-white to-slate-50 p-6'>
       <section>
-      <Card className='p-8 shadow-md bg-white/80'>
-        <p className='text-sm font-semibold uppercase tracking-wide text-blue-600'>Your favorite development services</p>
-        <CardTitle className='text-4xl font-bold leading-tight text-slate-900 dark:text-white
-        max-w-2xl'>
-          <h1>E-Shop - Everything you need in development services</h1>
-        </CardTitle>
-        <CardDescription>
-          <Link to= "/products" className='inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 
-          text-sm font-semiblod text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl'> 
-            Browser products
-            <ArrowRightIcon size={16}/>
-          </Link>
-        </CardDescription>
-      </Card>
+        <Card className='p-8 shadow-md bg-white/80'>
+          <p className='text-sm font-semibold uppercase tracking-wide text-blue-600'>Your favorite development services</p>
+          <CardTitle className='text-4xl font-bold leading-tight text-slate-900 dark:text-white
+          max-w-2xl'>
+            <h1>E-Shop - Everything you need in development services</h1>
+          </CardTitle>
+          <CardDescription>
+            <Link to= "/products" className='inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-3 
+            text-sm font-semiblod text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl'> 
+              Browser products
+              <ArrowRightIcon size={16}/>
+            </Link>
+          </CardDescription>
+        </Card>
       </section>
 
       <section className='space-y-4 max-w-6xl mx-auto rounded-2xl'>
