@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 export const Route = createFileRoute('/products/$id')({
   component: RouteComponent,
   loader: async({params}) => {
-    return sampleProducts.find((p) => p.id === params.id);
+    return sampleProducts.find((p: any) => p.id === params.id);
   }
 })
 

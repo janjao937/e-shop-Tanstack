@@ -1,5 +1,4 @@
-import { integer } from "drizzle-orm/gel-core";
-import { numeric, pgEnum, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { numeric, pgEnum, pgTable, text, timestamp, uuid, varchar, integer } from "drizzle-orm/pg-core";
 
 const badgeValues = ["NEW", "Sale", "Featured", "Limited"] as const;
 const inventoryValues = ["in-stock", "backorder", "preorder"] as const;
