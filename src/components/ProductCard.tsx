@@ -14,7 +14,7 @@ export function ProductCard ({product}: {
     name: string
     description: string
     price: string
-    bage?: string
+    badge?: string
     rating: string
     reviews: number
     image: string
@@ -26,7 +26,7 @@ export function ProductCard ({product}: {
       <Card className="px-2 py-4">
         <CardHeader className="gap-2 ">
           <div className="flex items-center gap-2">
-            {product.bage && (<span className="rouded-full bg-slate-900 px-2 py-0.5 text-xs font-semibold text-white">{product.bage}</span>)}
+            {product.badge && (<span className="rouded-full bg-slate-900 px-2 py-0.5 text-xs font-semibold text-white">{product.badge}</span>)}
           </div>
           <CardTitle className="text-lg font-semibold">{product.name}</CardTitle>
           <CardDescription>{product.description}</CardDescription>

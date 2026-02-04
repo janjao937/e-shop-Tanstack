@@ -12,3 +12,5 @@ const pool = new Pool({
     rejectUnauthorized: false,
   } : false,
 });
+
+export const db = drizzle(pool, {schema});
