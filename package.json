@@ -10,7 +10,12 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:seed": "tsx src/db/seed.ts",
+    
+    "db:seed:mac": "NODE_ENV=production NITRO_PRESET=node-server tsx scripts/seed.ts",
+    "db:seed:win": "set NODE_ENV=production && set NITRO_PRESET=node-server && tsx scripts/seed.ts --reset",
+
+    "db:seed": "set NODE_ENV=production && set NITRO_PRESET=node-server && tsx scripts/seed.ts --reset",
+    "db:reset": "db:seed -- --reset",
     "test": "vitest run"
   },
   "dependencies": {

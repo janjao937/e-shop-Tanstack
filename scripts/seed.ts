@@ -1,8 +1,11 @@
+process.env.NITRO_PRESET = "node-server";
+process.env.NODE_ENV = process.env.NODE_ENV || "production";
+
 import dotenv from "dotenv";
-import { ProductInsert } from "./schema";
+import { ProductInsert } from "../src/db/schema";
 dotenv.config();
 
-export const sampleProducts: ProductInsert[] = [
+const sampleProducts: ProductInsert[] = [
   {
     name: "Singleplayer Game",
     description: "Immersive singleplayer experience with both 3D and 2D gameplay modes.",
@@ -77,8 +80,8 @@ export const sampleProducts: ProductInsert[] = [
 
 async function seed() {
   try {
-    const { db } = await import("./index");
-    const { products } = await import("./schema");
+    const { db } = await import("../src/db/index");
+    const { products } = await import("../src/db/schema");
 
     console.log("Starting database seed!!!");
     const shouldReset = process.argv.includes("--reset") || process.argv.includes("-r");
