@@ -1,82 +1,83 @@
 process.env.NITRO_PRESET = "node-server";
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
 
+import { sampleProducts } from "@/data/products";
 import dotenv from "dotenv";
-import { ProductInsert } from "../src/db/schema";
+// import { ProductInsert } from "../src/db/schema";
 dotenv.config();
 
-const sampleProducts: ProductInsert[] = [
-  {
-    name: "Singleplayer Game",
-    description: "Immersive singleplayer experience with both 3D and 2D gameplay modes.",
-    price: "15000.00",
-    badge: "NEW",
-    rating: "4.8",
-    review: 120,
-    image: "/tanstack-circle-logo.png",
-    inventory: "in-stock"
-  },
-  {
-    name: "Sample Multiplayer Game",
-    description: "Engaging multiplayer adventure featuring 3D and 2D modes with leaderboard and turn-based mechanics.",
-    price: "25000.00",
-    badge: "NEW",
-    rating: "4.8",
-    review: 120,
-    image: "/tanstack-circle-logo.png",
-    inventory: "in-stock"
-  },
-  {
-    name: "Realtime Multiplayer Game",
-    description: "Fast-paced realtime multiplayer with 3D and 2D gameplay, powered by REST API and WebSocket protocols.",
-    price: "30000.00",
-    badge: "NEW",
-    rating: "4.8",
-    review: 20,
-    image: "/tanstack-circle-logo.png",
-    inventory: "backorder"
-  },
-  {
-    name: "Software Architecture Design",
-    description: "Professional design services for monolithic and microservice architectures, tailored to your project needs.",
-    price: "5000.00",
-    badge: "NEW",
-    rating: "4.8",
-    review: 120,
-    image: "/tanstack-circle-logo.png",
-    inventory: "in-stock"
-  },
-  {
-    name: "Backend",
-    description: "Robust backend development covering APIs and database integration for scalable applications.",
-    price: "30000.00",
-    badge: "NEW",
-    rating: "4.8",
-    review: 200,
-    image: "/tanstack-circle-logo.png",
-    inventory: "in-stock"
-  },
-  {
-    name: "Frontend",
-    description: "Modern frontend development for responsive web and mobile applications with intuitive UI/UX.",
-    price: "25000.00",
-    badge: "NEW",
-    rating: "4.8",
-    review: 120,
-    image: "/tanstack-circle-logo.png",
-    inventory: "in-stock"
-  },
-  {
-    name: "Fullstack",
-    description: "Comprehensive end-to-end fullstack solutions including frontend, backend, APIs, databases, and architecture design.",
-    price: "50000.00",
-    badge: "NEW",
-    rating: "5.0",
-    review: 200,
-    image: "/tanstack-circle-logo.png",
-    inventory: "backorder"
-  },
-]
+// const sampleProducts: ProductInsert[] = [
+//   {
+//     name: "Singleplayer Game",
+//     description: "Immersive singleplayer experience with both 3D and 2D gameplay modes.",
+//     price: "15000.00",
+//     badge: "NEW",
+//     rating: "4.8",
+//     review: 120,
+//     image: "/tanstack-circle-logo.png",
+//     inventory: "in-stock"
+//   },
+//   {
+//     name: "Sample Multiplayer Game",
+//     description: "Engaging multiplayer adventure featuring 3D and 2D modes with leaderboard and turn-based mechanics.",
+//     price: "25000.00",
+//     badge: "NEW",
+//     rating: "4.8",
+//     review: 120,
+//     image: "/tanstack-circle-logo.png",
+//     inventory: "in-stock"
+//   },
+//   {
+//     name: "Realtime Multiplayer Game",
+//     description: "Fast-paced realtime multiplayer with 3D and 2D gameplay, powered by REST API and WebSocket protocols.",
+//     price: "30000.00",
+//     badge: "NEW",
+//     rating: "4.8",
+//     review: 20,
+//     image: "/tanstack-circle-logo.png",
+//     inventory: "backorder"
+//   },
+//   {
+//     name: "Software Architecture Design",
+//     description: "Professional design services for monolithic and microservice architectures, tailored to your project needs.",
+//     price: "5000.00",
+//     badge: "NEW",
+//     rating: "4.8",
+//     review: 120,
+//     image: "/tanstack-circle-logo.png",
+//     inventory: "in-stock"
+//   },
+//   {
+//     name: "Backend",
+//     description: "Robust backend development covering APIs and database integration for scalable applications.",
+//     price: "30000.00",
+//     badge: "NEW",
+//     rating: "4.8",
+//     review: 200,
+//     image: "/tanstack-circle-logo.png",
+//     inventory: "in-stock"
+//   },
+//   {
+//     name: "Frontend",
+//     description: "Modern frontend development for responsive web and mobile applications with intuitive UI/UX.",
+//     price: "25000.00",
+//     badge: "NEW",
+//     rating: "4.8",
+//     review: 120,
+//     image: "/tanstack-circle-logo.png",
+//     inventory: "in-stock"
+//   },
+//   {
+//     name: "Fullstack",
+//     description: "Comprehensive end-to-end fullstack solutions including frontend, backend, APIs, databases, and architecture design.",
+//     price: "50000.00",
+//     badge: "NEW",
+//     rating: "5.0",
+//     review: 200,
+//     image: "/tanstack-circle-logo.png",
+//     inventory: "backorder"
+//   },
+// ]
 
 async function seed() {
   try {
@@ -106,4 +107,8 @@ async function seed() {
   }
 }
 
-seed();
+const isRunningAsScript = process.argv[1].includes("seed.ts") || process.argv[1]?.includes("tsx");
+
+if(isRunningAsScript) {
+  seed();
+}

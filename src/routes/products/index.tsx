@@ -1,10 +1,11 @@
 import { ProductCard } from '@/components/ProductCard'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { sampleProducts } from '@/db/seed'
+import { getAllProducts } from '@/data/products';
+
 import { createFileRoute } from '@tanstack/react-router'
 import { createMiddleware, createServerFn, json } from '@tanstack/react-start'
 
-const fetchProduct = createServerFn({method:"GET"}).handler(async () => sampleProducts);
+const fetchProduct = createServerFn({method:"GET"}).handler(async () => await getAllProducts());
 
 const loggerMiddleware = createMiddleware().server(async({request, next})=>{
   console.log(`---logging middleware---${request.url} from ${request.headers.get("origin")}`);
@@ -55,7 +56,7 @@ function RouteComponent() {
       <section>
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
           {
-            products.map((product, index) => {
+            products.map((product: any, index) => {
             return <ProductCard key={`product-${index}`} product = {product}/>
           })
         }

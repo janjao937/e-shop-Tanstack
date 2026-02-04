@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRightIcon } from 'lucide-react'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { sampleProducts } from '@/db/seed';
+// import { sampleProducts } from '@/db/seed';
 import { ProductCard } from '@/components/ProductCard';
+import { getRecomendedProducts } from '@/data/products';
 // import { createServerFn } from "@tanstack/react-start";
 
 // export const getServerTme = createServerFn({method: "GET"}).handler(
@@ -13,11 +14,8 @@ import { ProductCard } from '@/components/ProductCard';
 export const Route = createFileRoute("/")({
   component: App,
   loader: async () =>{
-    // const res = await fetch("https://fakestoreapi.com/products");
-    // const data = await res.json();
-    // // console.log(data[0]);
-    // return {products:data};
-    return {products: sampleProducts.slice(0,6)};
+    const products = await getRecomendedProducts();
+    return { products };
   }
 })
 

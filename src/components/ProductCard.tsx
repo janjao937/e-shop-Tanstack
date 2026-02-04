@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "./ui/button"
 import { ShoppingBagIcon } from "lucide-react"
 import { Link } from '@tanstack/react-router'
+import { ProductSelect } from "@/db/schema"
 
 const inventoryTone = {
   "in-stock": "bg-emerald-50 text-emerald-600 border-emerald-100",
@@ -10,19 +11,10 @@ const inventoryTone = {
   "preorder": "bg-indigo-50 text-indigo-700 border-indigo-100",
 }
 export function ProductCard ({product}: {
-  product: {
-    name: string
-    description: string
-    price: string
-    badge?: string
-    rating: string
-    reviews: number
-    image: string
-    inventory: string
-  }
+  product: ProductSelect
 }) {
   return (
-    <Link to="/products/$id" params = {{id: "1"}} className="cursor-pointer h-full hover:translate-y-1 hover:shadow-lg transition">
+    <Link to="/products/$id" params = {{id: product.id}} className="cursor-pointer h-full hover:translate-y-1 hover:shadow-lg transition">
       <Card className="px-2 py-4">
         <CardHeader className="gap-2 ">
           <div className="flex items-center gap-2">
@@ -35,7 +27,7 @@ export function ProductCard ({product}: {
         <CardContent className="flex items-center justify-between">
           <p className="flex items-center gap-2 text-sm text-slate-600">
             <span className="font-semibold">{product.rating}</span>
-            <span className="text-xs">({product.reviews} reviews)</span> 
+            <span className="text-xs">({product.review} reviews)</span> 
           </p>
           <span className={cn("rounded-full border px-3 py-1 text-xs font-semibold", inventoryTone[product.inventory as keyof typeof inventoryTone])}>
             {
