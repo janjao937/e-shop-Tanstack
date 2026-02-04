@@ -107,7 +107,7 @@ async function seed() {
   }
 }
 
-const isRunningAsScript = process.argv[1].includes("seed.ts") || process.argv[1]?.includes("tsx");
+const isRunningAsScript = process.argv[1]?.includes("seed.ts") || process.argv[1]?.includes("tsx");
 
 if(isRunningAsScript) {
   seed();

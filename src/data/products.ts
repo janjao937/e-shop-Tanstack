@@ -1,5 +1,5 @@
 import {db} from "@/db";
-import { type ProductInsert, products } from "@/db/schema";
+import { type ProductInsert, products, ProductSelect } from "@/db/schema";
 import { eq } from "drizzle-orm"; 
 
 export const sampleProducts: ProductInsert[] = [
@@ -96,9 +96,9 @@ export async function getProductById(id: string) {
   }
 }
 
-export async function getAllProducts() {
+export async function getAllProducts(): Promise<ProductSelect[]> {
   try {
-    const allProducts = await db.select().from(products);
+    const allProducts: ProductSelect[] = await db.select().from(products);
     
     return allProducts;
   } catch(err) {

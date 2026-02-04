@@ -3,7 +3,6 @@ import { ArrowRightIcon } from 'lucide-react'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 // import { sampleProducts } from '@/db/seed';
 import { ProductCard } from '@/components/ProductCard';
-import { getRecomendedProducts } from '@/data/products';
 // import { createServerFn } from "@tanstack/react-start";
 
 // export const getServerTme = createServerFn({method: "GET"}).handler(
@@ -14,13 +13,14 @@ import { getRecomendedProducts } from '@/data/products';
 export const Route = createFileRoute("/")({
   component: App,
   loader: async () =>{
+    const {getRecomendedProducts} = await import("@/data/products");
     const products = await getRecomendedProducts();
-    return { products };
+    return products;
   }
 })
 
 function App() {
-  const {products} = Route.useLoaderData();
+  const products = Route.useLoaderData();
 
   return (
     <div className='space-y-12 bg-linear-to-b from-slate-50 via-white to-slate-50 p-6'>
