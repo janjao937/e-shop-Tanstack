@@ -6,7 +6,7 @@ export const sampleProducts: ProductInsert[] = [
   {
     name: "Singleplayer Game",
     description: "Immersive singleplayer experience with both 3D and 2D gameplay modes.",
-    price: "15,000.00",
+    price: "15000.00",
     badge: "NEW",
     rating: "4.8",
     review: 120,
@@ -16,7 +16,7 @@ export const sampleProducts: ProductInsert[] = [
   {
     name: "Sample Multiplayer Game",
     description: "Engaging multiplayer adventure featuring 3D and 2D modes with leaderboard and turn-based mechanics.",
-    price: "25,000.00",
+    price: "25000.00",
     badge: "NEW",
     rating: "4.8",
     review: 120,
@@ -26,7 +26,7 @@ export const sampleProducts: ProductInsert[] = [
   {
     name: "Realtime Multiplayer Game",
     description: "Fast-paced realtime multiplayer with 3D and 2D gameplay, powered by REST API and WebSocket protocols.",
-    price: "30,000.00",
+    price: "30000.00",
     badge: "NEW",
     rating: "4.8",
     review: 20,
@@ -36,7 +36,7 @@ export const sampleProducts: ProductInsert[] = [
   {
     name: "Software Architecture Design",
     description: "Professional design services for monolithic and microservice architectures, tailored to your project needs.",
-    price: "5,000.00",
+    price: "5000.00",
     badge: "NEW",
     rating: "4.8",
     review: 120,
@@ -46,7 +46,7 @@ export const sampleProducts: ProductInsert[] = [
   {
     name: "Backend",
     description: "Robust backend development covering APIs and database integration for scalable applications.",
-    price: "30,000.00",
+    price: "30000.00",
     badge: "NEW",
     rating: "4.8",
     review: 200,
@@ -56,7 +56,7 @@ export const sampleProducts: ProductInsert[] = [
   {
     name: "Frontend",
     description: "Modern frontend development for responsive web and mobile applications with intuitive UI/UX.",
-    price: "25,000.00",
+    price: "25000.00",
     badge: "NEW",
     rating: "4.8",
     review: 120,
@@ -66,7 +66,7 @@ export const sampleProducts: ProductInsert[] = [
   {
     name: "Fullstack",
     description: "Comprehensive end-to-end fullstack solutions including frontend, backend, APIs, databases, and architecture design.",
-    price: "50,000.00",
+    price: "50000.00",
     badge: "NEW",
     rating: "5.0",
     review: 200,
