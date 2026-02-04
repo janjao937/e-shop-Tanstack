@@ -94,6 +94,9 @@ async function seed() {
         process.exit(0);
       }
     }
+    console.log(`Insert ${sampleProducts.length} product...`);
+    await db.insert(products).values(sampleProducts);
+    console.log("insert seed success");
   } catch(err){
     console.error("Error seeding database", err);
     process.exit(1);
