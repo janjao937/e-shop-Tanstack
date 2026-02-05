@@ -5,25 +5,25 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router'
 import { createMiddleware, createServerFn, json } from '@tanstack/react-start'
 
-const fetchProduct = createServerFn({method:"GET"}).handler(async () => {
-  const {getAllProducts} = await import('@/data/products');
+const fetchProduct = createServerFn({ method: "GET" }).handler(async () => {
+  const { getAllProducts } = await import('@/data/products');
   return await getAllProducts();
 });
 
-const loggerMiddleware = createMiddleware().server(async({request, next})=>{
+const loggerMiddleware = createMiddleware().server(async ({ request, next }) => {
   console.log(`---logging middleware---${request.url} from ${request.headers.get("origin")}`);
   return next();
 });
 
 export const Route = createFileRoute('/products/')({
   component: RouteComponent,
-  loader: async() => {
+  loader: async () => {
     return fetchProduct();
   },
-  server:{
+  server: {
     middleware: [loggerMiddleware],
     handlers: {
-      POST: async({request})=>{
+      POST: async ({ request }) => {
         let body = null;
         try {
           body = await request.json();
@@ -41,7 +41,7 @@ function RouteComponent() {
   const products = Route.useLoaderData();
   const { data } = useQuery({
     queryKey: ["product"],
-    queryFn: ()=> fetchProduct(),
+    queryFn: () => fetchProduct(),
     initialData: products
   })
   return (
@@ -58,16 +58,16 @@ function RouteComponent() {
                 Curated items to try cart and detail pages quickly
               </CardDescription>
             </div>
-          </div>   
+          </div>
         </Card>
       </section>
       <section>
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
           {
             products.map((product: any, index: number) => {
-            return <ProductCard key={`product-${index}`} product = {product}/>
-          })
-        }
+              return <ProductCard key={`product-${index}`} product={product} />
+            })
+          }
         </div>
 
       </section>

@@ -1,6 +1,7 @@
 import { numeric, pgEnum, pgTable, text, timestamp, uuid, varchar, integer } from "drizzle-orm/pg-core";
 
-const badgeValues = ["NEW", "Sale", "Featured", "Limited"] as const;
+// const badgeValues = ["NEW", "Sale", "Featured", "Limited"] as const;
+const badgeValues = ['New', 'Sale', 'Featured', 'Limited'] as const;
 const inventoryValues = ["in-stock", "backorder", "preorder"] as const;
 
 export const badgeEnum = pgEnum("badge", badgeValues);

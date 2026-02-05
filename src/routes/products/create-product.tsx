@@ -1,5 +1,5 @@
-import { badgeEnum, BadgeValue, inventoryEnum, InventoryValues } from '@/db/schema';
-import { createFileRoute } from '@tanstack/react-router';
+import { BadgeValue, InventoryValues, ProductInsert, ProductSelect } from '@/db/schema';
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router';
 import { useForm } from '@tanstack/react-form';
 import { z } from "zod";
 import { Label } from '@/components/ui/label';
@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-
+import { createServerFn } from '@tanstack/react-start';
 
 export const Route = createFileRoute('/products/create-product')({
   component: RouteComponent,
@@ -19,14 +19,41 @@ const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().min(1, 'Description is required'),
   price: z.string().refine((val) => !isNaN(Number(val)), 'Price must be a number'),
-  badge: z.union([z.enum(['New', 'Sale', 'Featured', 'Limited']), z.undefined()]),
+  badge: z.union([z.enum(['New', 'Sale', 'Featured', 'Limited']), z.undefined(),]),
   rating: z.number().min(0, 'Rating is required'),
   reviews: z.number().min(0, 'Reviews is required'),
   image: z.string().url('Image must be a valid URL').max(512, 'Image must be 512 chars or less'),
   inventory: z.enum(['in-stock', 'backorder', 'preorder']),
 });
 
+type CreateProductData = {
+  name: string
+  description: string
+  price: string
+  image: string
+  badge?: 'New' | 'Sale' | 'Featured' | 'Limited'
+  inventory: 'in-stock' | 'backorder' | 'preorder'
+}
+
+const createProductServerFn = createServerFn({ method: "POST" }).inputValidator((data: CreateProductData) => data).handler(async ({ data }): Promise<ProductSelect> => {
+  const { createProduct } = await import("@/data/products");
+  const productData: ProductInsert = {
+    name: data.name,
+    description: data.description,
+    price: data.price,
+    image: data.image,
+    badge: data.badge ?? null,
+    inventory: data.inventory
+  }
+
+  return createProduct(productData);
+});
+
+
 function RouteComponent() {
+  const navigate = useNavigate();
+  const router = useRouter();
+
   const form = useForm({
     defaultValues: {
       name: '',
@@ -47,7 +74,13 @@ function RouteComponent() {
         return undefined;
       }
     },
-    onSubmit: async ({ value }) => { }
+    onSubmit: async ({ value }) => {
+      try {
+
+      } catch (error) {
+        console.error('Error creating product', error)
+      }
+    }
   });
 
   return (
@@ -75,9 +108,9 @@ function RouteComponent() {
                       <Input type='text'
                         id={field.name}
                         name={field.name}
-                        onChange={(e) => field.handleChange((prev) => e.target.value)}
+                        onChange={(e) => field.handleChange(e.target.value)}
                         placeholder='Enter product name'
-                        aria-invalid={field.state.meta.isValid} />
+                        aria-invalid={!field.state.meta.isValid} />
                       <FieldError errors={field.state.meta.errors} />
                     </div>
                   )
@@ -175,8 +208,7 @@ function RouteComponent() {
                       value={field.state.value}
                       onValueChange={(value) =>
                         field.handleChange(value as InventoryValues)
-                      }
-                    >
+                      }>
                       <SelectTrigger id={field.name} className={'w-full'}>
                         <SelectValue />
                       </SelectTrigger>
@@ -198,7 +230,7 @@ function RouteComponent() {
                       {isSubmitting ? 'Creating...' : 'Create Product'}
                     </Button>
                     <Button type="button" variant={'outline'}
-                      onClick={() => { console.log("cancel")}}>
+                      onClick={() => { navigate({ to: "/products" }) }}>
                       Cancel
                     </Button>
                   </div>
