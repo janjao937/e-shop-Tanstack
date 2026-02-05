@@ -76,7 +76,18 @@ function RouteComponent() {
     },
     onSubmit: async ({ value }) => {
       try {
-
+        await createProductServerFn({
+          data: {
+            name: value.name,
+            description: value.description,
+            price: value.price,
+            image: value.image,
+            badge: value.badge,
+            inventory: value.inventory
+          }
+        });
+        await router.invalidate({ sync: true });
+        navigate({ to: "/products" });
       } catch (error) {
         console.error('Error creating product', error)
       }
