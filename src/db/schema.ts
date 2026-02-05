@@ -34,4 +34,4 @@ export type CartItemSelect = typeof cartItem.$inferSelect;
 export type CartItemInsert = typeof cartItem.$inferInsert;
 
 export type BadgeValue = (typeof badgeValues)[number];
-export type inventoryValues = (typeof inventoryValues)[number];
+export type InventoryValues = (typeof inventoryValues)[number];

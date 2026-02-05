@@ -20,7 +20,7 @@ export default function Header() {
             <nav className ='hidden items-center gap-3 text-sm font-medium text-slate-700 dark:text-slate-200 sm:flex'>
               <Link className='rounded-lg px-3 py-1 transition hover:bg-slate-100 dark:hover:bg-slate-800' to="/">Home</Link>
               <Link className='rounded-lg px-3 py-1 transition hover:bg-slate-100 dark:hover:bg-slate-800' to="/products">Products</Link>
-              <Link className='rounded-lg px-3 py-1 transition hover:bg-slate-100 dark:hover:bg-slate-800' to="/">Create Product</Link>
+              <Link className='rounded-lg px-3 py-1 transition hover:bg-slate-100 dark:hover:bg-slate-800' to="/products/create-product">Create Product</Link>
             </nav>
               
           </div>
