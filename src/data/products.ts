@@ -77,6 +77,8 @@ export const sampleProducts: ProductInsert[] = [
 
 export async function getRecomendedProducts() {
   try{
+    await new Promise((resolve) => setTimeout(resolve, 5000));//delay for test loading
+
     const productsData = await db.select().from(products).limit(3);
     return productsData
   }catch(err){

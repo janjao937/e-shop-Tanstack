@@ -1,20 +1,22 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { ArrowRightIcon } from 'lucide-react'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-// import { sampleProducts } from '@/db/seed';
 import { ProductCard } from '@/components/ProductCard';
-// import { createServerFn } from "@tanstack/react-start";
+import { createServerFn } from '@tanstack/react-start';
 
-// export const getServerTme = createServerFn({method: "GET"}).handler(
-//   async () => {
-//     return new Date().toISOString();
-// });
+const fetchRecomendedProduct = createServerFn({method: "GET"}).handler(async()=>{
+  const {getRecomendedProducts} = await import("@/data/products");
+  const products = await getRecomendedProducts();
+  return products;
+})
 
 export const Route = createFileRoute("/")({
   component: App,
   loader: async () =>{
-    const {getRecomendedProducts} = await import("@/data/products");
-    const products = await getRecomendedProducts();
+    // const {getRecomendedProducts} = await import("@/data/products");
+    // const products = await getRecomendedProducts();
+    // return products;
+    const products = await fetchRecomendedProduct();
     return products;
   }
 })
