@@ -1,31 +1,57 @@
+import { RecommendedProducts } from '@/components/RecommendedProducts';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Skeleton } from '@/components/ui/skeleton';
+import { ProductSelect } from '@/db/schema';
+import { createFileRoute, Link, notFound } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start';
 import { ArrowLeftIcon, ShoppingBagIcon, SparklesIcon } from 'lucide-react';
+import { Suspense } from 'react';
 
 const fetchProductById = createServerFn({ method: 'POST' })
   .inputValidator((data: { id: string }) => data)
   .handler(async ({ data }) => {
-    const { getProductById } = await import('@/data/products')
-    const product = await getProductById(data.id)
+    const { getProductById } = await import('@/data/products');
+    const product = await getProductById(data.id);
     return product
   });
+
+const fetchRecomendedProducts = createServerFn({ method: "GET" }).handler(async () => {
+  const { getRecomendedProducts } = await import("@/data/products");
+  // const recommendedProducts = await getRecomendedProducts();
+  // return recommendedProducts ;
+  return getRecomendedProducts();
+})
 
 export const Route = createFileRoute('/products/$id')({
   component: RouteComponent,
   loader: async ({ params }) => {
-    // const { getProductById } = await import('@/data/products')
-    // return await getProductById(params.id);
     const product = await fetchProductById({ data: { id: params.id } });
-    return { product }
+    const recommendedProducts = fetchRecomendedProducts();
+
+    if (!product) throw notFound();
+    return { product, recommendedProducts }
+  },
+  head: async ({ loaderData: data }) => {
+    const { product } = data as { product: ProductSelect }
+    if (!product) return {}
+    return {
+      meta: [
+        { name: 'description', content: product?.name },
+        { name: 'image', content: product?.image },
+        { name: 'title', content: product?.name },
+        { name: 'canonical', content: process.env.NODE_ENV === "production" ? `${process.env.END_POINT}/products/${product?.id}` : `http://localhost:3000/products/${product?.id}` || `localhost:3000/products/${product?.id}` },
+        { title: product?.name },
+        { description: product?.description }
+      ]
+    }
   }
 })
 
 function RouteComponent() {
   // const { id } = Route.useParams();
 
-  const { product } = Route.useLoaderData();
+  const { product, recommendedProducts } = Route.useLoaderData();
 
   // return <div>Hello "/products/{id} {JSON.stringify(product, null, 2)}</div>
 
@@ -44,8 +70,7 @@ function RouteComponent() {
                   src={product?.image}
                   alt={product?.name}
                   className="h-full w-full object-contain p-6"
-                  loading="lazy"
-                />
+                  loading="lazy" />
               </div>
             </div>
             <div className="space-y-4">
@@ -61,7 +86,7 @@ function RouteComponent() {
               <CardContent className='flex items-start flex-col space-y-4'>
                 <CardDescription className='text-lg'>{product?.description}</CardDescription>
                 <div className="flex items-center gap-3">
-                  <span className='text-3xl font-bold'>{Number(product?.price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                  <span className='text-3xl font-bold'>฿{Number(product?.price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                   <span className='text-sm text-slate-500'> Rated {product?.rating.toString()} ({product?.review}{' '} reviews)</span>
                 </div>
                 <div className="flex items-center gap-3 rounded-xl border bg-slate-50 p-4 text-sm font-medium dark:border-slate-800 dark:bg-slate-800">
@@ -77,8 +102,8 @@ function RouteComponent() {
                     <ShoppingBagIcon size={16} />
                     Add to cart
                   </Button>
-                  <Button variant="outline" 
-                    className="border-slate-200 text-slate-700 transition hover:-translate-y-0.5 hover:shadow-sm dark:border-slate-800 dark:text-slate-100">
+                  <Button
+                    variant="outline" className="border-slate-200 text-slate-700 transition hover:-translate-y-0.5 hover:shadow-sm dark:border-slate-800 dark:text-slate-100">
                     Save for later
                   </Button>
                 </div>
@@ -86,7 +111,21 @@ function RouteComponent() {
             </div>
           </div>
         </Card>
+        <h2 className='text-2xl font-bold my-4'>Recommended Products</h2>
+        <Suspense fallback={<LoadingProductSkeleton />}>
+          <RecommendedProducts recommendedProducts={recommendedProducts} />
+        </Suspense>
       </Card>
     </div>
   )
+}
+
+const LoadingProductSkeleton = () => {
+  return <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+    {
+      Array.from({ length: 6 }).map((_, index) => (
+        <Skeleton key = {index}className='w-full h-48' />
+      ))
+    }
+  </div>
 }
