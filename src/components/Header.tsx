@@ -26,7 +26,7 @@ export default function Header() {
           </div>
           <div className='flex items-center gap-2'>
                 <Link className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs
-                font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" to="/">
+                font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" to="/cart">
                   <span>Cart</span>
                   <span className='flex h-6 min-w-6 items-center justify-center rounded-full bg-slate-900 text-xs text-white 
                   text-[11px] font-bold'>0</span>

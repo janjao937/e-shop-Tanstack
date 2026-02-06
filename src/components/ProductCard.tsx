@@ -15,8 +15,8 @@ export function ProductCard ({product}: {
 }) {
   return (
     <Link to="/products/$id" params = {{id: product.id}} className="cursor-pointer h-full hover:translate-y-1 hover:shadow-lg transition">
-      <Card className="px-2 py-4">
-        <CardHeader className="gap-2 ">
+      <Card className="px-2 py-4 ">{/*min-h-[260px]*/}
+        <CardHeader className="gap-2">
           <div className="flex items-center gap-2">
             {product.badge && (<span className="rouded-full bg-slate-900 px-2 py-0.5 text-xs font-semibold text-white">{product.badge}</span>)}
           </div>
@@ -36,7 +36,7 @@ export function ProductCard ({product}: {
           </span>
         </CardContent>
         <CardFooter className="pt-0 flex items-center justify-between border-t-0">
-          <span className="text-lg font-semibold">฿{product.price}</span>
+          <span className="text-lg font-semibold">฿{Number(product?.price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
           <Button size= "sm" variant= "secondary" className="bg-slate-900 text-white hover:bg-slate-800">
             <ShoppingBagIcon size={16} 
               onClick={(e) => {

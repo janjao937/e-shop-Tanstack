@@ -23,7 +23,7 @@ export const products = pgTable("products", {
 export type ProductSelect = typeof products.$inferSelect;
 export type ProductInsert = typeof products.$inferInsert;
 
-export const cartItem = pgTable("cart_items", {
+export const cartItems = pgTable("cart_items", {
   id: uuid("id").primaryKey().defaultRandom(),
   productId: uuid("product_id").notNull().references(() => products.id, { onDelete: "cascade"}),
   quantity: integer("quantity").notNull().default(1),
@@ -31,8 +31,8 @@ export const cartItem = pgTable("cart_items", {
   updatedAt: timestamp("updated_at").defaultNow().notNull()
 });
 
-export type CartItemSelect = typeof cartItem.$inferSelect;
-export type CartItemInsert = typeof cartItem.$inferInsert;
+export type CartItemSelect = typeof cartItems.$inferSelect & typeof products.$inferSelect;
+export type CartItemInsert = typeof cartItems.$inferInsert;
 
 export type BadgeValue = (typeof badgeValues)[number];
 export type InventoryValues = (typeof inventoryValues)[number];
