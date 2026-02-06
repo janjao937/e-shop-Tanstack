@@ -1,20 +1,34 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router';
 import { Minus, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createServerFn } from '@tanstack/react-start';
 import { EmptyCartState } from '@/components/cart/EmptyCartState';
 import { CartItemSelect } from '@/db/schema';
-import { number } from 'zod';
 
-const fetchCardItems = createServerFn({method: "GET"}).handler(async() => {
-  const {getCartItemsFn} = await import("@/data/cart"); 
-  const data = await getCartItemsFn();
+
+const fetchCardItems = createServerFn({ method: "GET" }).handler(async () => {
+  const { getCartItems } = await import("@/data/cart.server");
+  const data = await getCartItems();
   return data;
-});
 
+});
+export const mutateCartFn = createServerFn({ method: "POST" }).inputValidator((data: { action: "add" | "remove" | "update" | "clear", productId: string; quantity: number }) => data).handler(async ({ data }) => {
+  const { addToCart, clearCart, removeFromCart, updateCartItem } = await import("@/data/cart.server");
+
+  switch (data.action) {
+    case "add":
+      return await addToCart(data.productId, data.quantity);
+    case "remove":
+      return await removeFromCart(data.productId);
+    case "update":
+      return await updateCartItem(data.productId, data.quantity);
+    case "clear":
+      return await clearCart();
+  }
+})
 export const Route = createFileRoute('/cart')({
   component: CartPage,
-  loader: async() => {
+  loader: async () => {
     return fetchCardItems();
   }
 
@@ -22,13 +36,13 @@ export const Route = createFileRoute('/cart')({
 
 function CartPage() {
   const cart = Route.useLoaderData();
-
+  const router = useRouter();
   const shipping = cart.items.length > 0 ? 8 : 0
-  const subtotal = cart.items.reduce((accumulator: number, item: CartItemSelect) => accumulator + Number(item.price) * item.quantity);
+  const subtotal = cart.items.reduce(((accumulator: number, item: CartItemSelect) => accumulator + Number(item.price) * item.quantity), 0);
   const total = subtotal + shipping
 
   if (cart.items.length === 0) {
-    return <EmptyCartState/>
+    return <EmptyCartState />
   }
 
   return (
@@ -69,7 +83,7 @@ function CartPage() {
                   {item.name}
                 </Link>
                 <div className="flex items-center gap-3 text-sm font-semibold">
-                  <span>${Number(item.price).toFixed(2)}</span>
+                  <span>฿{Number(item.price).toFixed(2)}</span>
                   <span className="text-slate-400">·</span>
                   <span className="text-slate-600 dark:text-slate-300">
                     {item.inventory === 'in-stock'
@@ -87,7 +101,17 @@ function CartPage() {
                     size="icon-sm"
                     variant="outline"
                     aria-label={`Decrease ${item.name}`}
-                    onClick={() => { }}
+                    onClick={async () => {
+                      await mutateCartFn({
+                        data: {
+                          action: "update",
+                          productId: item.id,
+                          quantity: Number(item.quantity) - 1
+                        }
+                      })
+                      await router.invalidate({sync: true});
+                    }
+                  }
                   >
                     <Minus size={14} />
                   </Button>
@@ -103,12 +127,23 @@ function CartPage() {
                     size="icon-sm"
                     variant="outline"
                     aria-label={`Increase ${item.name}`}
-                    onClick={() => { }}>
+                    onClick={async () => {
+                      await mutateCartFn({
+                        data: {
+                          action: "add",
+                          productId: item.id,
+                          quantity: 1
+                        }
+                      })
+                      await router.invalidate({sync: true});
+                    }
+
+                    }>
                     <Plus size={14} />
                   </Button>
                 </div>
                 <div className="text-sm font-semibold">
-                  ${(Number(item.price) * item.quantity).toFixed(2)}
+                  ฿{(Number(item.price) * item.quantity).toFixed(2)}
                 </div>
                 <Button
                   size="sm"
@@ -138,7 +173,7 @@ function CartPage() {
           Your cart is stored in the database and synced with TanStack Query.
         </p>
       </div>
-    </div>
+    </div >
   )
 }
 
@@ -155,7 +190,7 @@ function SummaryRow({
     <div className="flex items-center justify-between">
       <span className={bold ? 'font-semibold' : ''}>{label}</span>
       <span className={bold ? 'text-lg font-bold' : 'font-semibold'}>
-        ${value.toFixed(2)}
+        ฿{value ? Number(value).toFixed() : 0}
       </span>
     </div>
   )
