@@ -5,6 +5,7 @@ import { ShoppingBagIcon } from "lucide-react"
 import { Link, useRouter } from '@tanstack/react-router'
 import { ProductSelect } from "@/db/schema"
 import { mutateCartFn } from "@/routes/cart"
+import { useQueryClient } from "@tanstack/react-query"
 
 const inventoryTone = {
   "in-stock": "bg-emerald-50 text-emerald-600 border-emerald-100",
@@ -15,6 +16,7 @@ export function ProductCard({ product }: {
   product: ProductSelect
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   return (
     <Link to="/products/$id" params={{ id: product.id }} className="cursor-pointer h-full hover:translate-y-1 hover:shadow-lg transition">
       <Card className="px-2 py-4 ">{/*min-h-[260px]*/}
@@ -52,6 +54,9 @@ export function ProductCard({ product }: {
                 }
               })
               await router.invalidate({ sync: true });
+              await queryClient.invalidateQueries({
+                queryKey: ["cart-items-data"]
+              });
             }}>
             <ShoppingBagIcon size={16} /> Add to Cart
           </Button>

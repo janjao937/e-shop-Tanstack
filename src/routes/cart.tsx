@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { createServerFn } from '@tanstack/react-start';
 import { EmptyCartState } from '@/components/cart/EmptyCartState';
 import { CartItemSelect } from '@/db/schema';
+import { useQueryClient } from '@tanstack/react-query';
 
 
 const fetchCardItems = createServerFn({ method: "GET" }).handler(async () => {
@@ -35,6 +36,7 @@ export const Route = createFileRoute('/cart')({
 })
 
 function CartPage() {
+  const queryClient = useQueryClient();
   const cart = Route.useLoaderData();
   const router = useRouter();
   const shipping = cart.items.length > 0 ? 8 : 0
@@ -109,9 +111,12 @@ function CartPage() {
                           quantity: Number(item.quantity) - 1
                         }
                       })
-                      await router.invalidate({sync: true});
+                      await router.invalidate({ sync: true });
+                      await queryClient.invalidateQueries({
+                        queryKey: ["cart-items-data"]
+                      })
                     }
-                  }
+                    }
                   >
                     <Minus size={14} />
                   </Button>
@@ -135,7 +140,10 @@ function CartPage() {
                           quantity: 1
                         }
                       })
-                      await router.invalidate({sync: true});
+                      await router.invalidate({ sync: true });
+                      await queryClient.invalidateQueries({
+                        queryKey: ["cart-items-data"]
+                      })
                     }
 
                     }>

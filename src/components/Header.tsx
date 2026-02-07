@@ -11,8 +11,8 @@ const getCartItemsCount = createServerFn({method: "GET"}).handler(async()=>{
 
 
 export default function Header() {
-  const {data: cartItemData} = useQuery({
-    queryKey:["cart-items-count"],
+  const {data: cartItemsData} = useQuery({
+    queryKey:["cart-items-data"],
     queryFn: () => getCartItemsCount()
   })
   return (
@@ -42,8 +42,8 @@ export default function Header() {
                 font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md" to="/cart">
                   <span>Cart</span>
                   <span className='flex h-6 min-w-6 items-center justify-center rounded-full bg-slate-900 text-xs text-white 
-                  text-[11px] font-bold'>{cartItemData?.count ?? 0}</span>
-                  <span className='hidden text-[11px] font-medium text-slate-500 sm:inline'>฿{cartItemData?.total ?? 0}</span>
+                  text-[11px] font-bold'>{cartItemsData?.count ?? 0}</span>
+                  <span className='hidden text-[11px] font-medium text-slate-500 sm:inline'>฿{cartItemsData?.total.toFixed(2) ?? 0}</span>
                 </Link>
           </div>
         </div>
