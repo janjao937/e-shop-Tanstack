@@ -5,6 +5,9 @@ import { createServerFn } from '@tanstack/react-start';
 import { EmptyCartState } from '@/components/cart/EmptyCartState';
 import { CartItemSelect } from '@/db/schema';
 import { useQueryClient } from '@tanstack/react-query';
+import { SummaryRow } from '@/components/cart/SummaryRow';
+import { CartItem } from '@/types/cart-type';
+import { CartFooter } from '@/components/cart/CartFooter';
 
 
 const fetchCardItems = createServerFn({ method: "GET" }).handler(async () => {
@@ -13,7 +16,17 @@ const fetchCardItems = createServerFn({ method: "GET" }).handler(async () => {
   return data;
 
 });
-export const mutateCartFn = createServerFn({ method: "POST" }).inputValidator((data: { action: "add" | "remove" | "update" | "clear", productId: string; quantity: number }) => data).handler(async ({ data }) => {
+
+type MutateCartInput = {
+  action: "add" | "remove" | "update"
+  productId: string
+  quantity: number
+} | {
+  action: "clear"
+  productId?: never
+  quantity?: never
+}
+export const mutateCartFn = createServerFn({ method: "POST" }).inputValidator((data: MutateCartInput) => data).handler(async ({ data }) => {
   const { addToCart, clearCart, removeFromCart, updateCartItem } = await import("@/data/cart.server");
 
   switch (data.action) {
@@ -45,7 +58,59 @@ function CartPage() {
 
   if (cart.items.length === 0) {
     return <EmptyCartState />
+  } const handleClearCart = async () => {
+    await mutateCartFn({
+      data: {
+        action: 'clear',
+      },
+    })
+    await router.invalidate({ sync: true })
+    await queryClient.invalidateQueries({ queryKey: ['cart-items-data'] })
   }
+
+  const handleDecrementQuantity = async (item: CartItem) => {
+    await mutateCartFn({
+      data: {
+        action: 'update',
+        productId: item.id,
+        quantity: Number(item.quantity) - 1,
+      },
+    })
+    await router.invalidate({ sync: true })
+    await queryClient.invalidateQueries({
+      queryKey: ['cart-items-data'],
+    })
+  }
+
+  const handleIncrementQuantity = async (item: CartItem) => {
+    await mutateCartFn({
+      data: {
+        action: 'add',
+        productId: item.id,
+        quantity: 1,
+      },
+    })
+    await router.invalidate({ sync: true })
+    await queryClient.invalidateQueries({
+      queryKey: ['cart-items-data'],
+    })
+  }
+
+  const handleRemoveItem = async (item: CartItem) => {
+    await mutateCartFn({
+      data: {
+        action: 'remove',
+        quantity: 0,
+        productId: item.id,
+      },
+    })
+    await router.invalidate({ sync: true })
+    await queryClient.invalidateQueries({
+      queryKey: ['cart-items-data'],
+    })
+  }
+
+
 
   return (
     <div className="mx-auto grid max-w-5xl gap-6 rounded-2xl border bg-white/80 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/80 lg:grid-cols-[2fr,1fr]">
@@ -57,7 +122,7 @@ function CartPage() {
               Review your picks before checking out.
             </p>
           </div>
-          <Button variant="ghost" size="sm">
+          <Button variant="ghost" size="sm" onClick={handleClearCart}>
             Clear cart
           </Button>
         </div>
@@ -85,7 +150,7 @@ function CartPage() {
                   {item.name}
                 </Link>
                 <div className="flex items-center gap-3 text-sm font-semibold">
-                  <span>฿{Number(item.price).toFixed(2)}</span>
+                  <span>฿{Number(item.price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                   <span className="text-slate-400">·</span>
                   <span className="text-slate-600 dark:text-slate-300">
                     {item.inventory === 'in-stock'
@@ -103,21 +168,7 @@ function CartPage() {
                     size="icon-sm"
                     variant="outline"
                     aria-label={`Decrease ${item.name}`}
-                    onClick={async () => {
-                      await mutateCartFn({
-                        data: {
-                          action: "update",
-                          productId: item.id,
-                          quantity: Number(item.quantity) - 1
-                        }
-                      })
-                      await router.invalidate({ sync: true });
-                      await queryClient.invalidateQueries({
-                        queryKey: ["cart-items-data"]
-                      })
-                    }
-                    }
-                  >
+                    onClick={() => handleDecrementQuantity(item)}>
                     <Minus size={14} />
                   </Button>
                   <input
@@ -125,39 +176,25 @@ function CartPage() {
                     min={1}
                     max={99}
                     value={item.quantity}
-                    onChange={(event) => { }}
+                    // onChange={(event) => { }}
                     className="h-9 w-14 rounded-md border border-slate-200 bg-white text-center text-sm font-semibold shadow-xs dark:border-slate-800 dark:bg-slate-900"
                   />
                   <Button
                     size="icon-sm"
                     variant="outline"
                     aria-label={`Increase ${item.name}`}
-                    onClick={async () => {
-                      await mutateCartFn({
-                        data: {
-                          action: "add",
-                          productId: item.id,
-                          quantity: 1
-                        }
-                      })
-                      await router.invalidate({ sync: true });
-                      await queryClient.invalidateQueries({
-                        queryKey: ["cart-items-data"]
-                      })
-                    }
-
-                    }>
+                    onClick={() => handleIncrementQuantity(item)}>
                     <Plus size={14} />
                   </Button>
                 </div>
                 <div className="text-sm font-semibold">
-                  ฿{(Number(item.price) * item.quantity).toFixed(2)}
+                  ฿{(Number(item.price) * item.quantity).toLocaleString("en-US", { minimumFractionDigits: 2 })}
                 </div>
                 <Button
                   size="sm"
                   variant="ghost"
                   className="text-slate-500 hover:text-red-500"
-                  onClick={() => { }}>
+                  onClick={() => handleRemoveItem(item)}>
                   Remove
                 </Button>
               </div>
@@ -165,41 +202,7 @@ function CartPage() {
           ))}
         </div>
       </div>
-
-      <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
-        <h2 className="text-lg font-semibold">Order summary</h2>
-        <div className="space-y-2">
-          <SummaryRow label="Subtotal" value={subtotal} />
-          <SummaryRow label="Shipping" value={shipping} />
-          <div className="h-px bg-slate-200 dark:bg-slate-800" />
-          <SummaryRow label="Total" value={total} bold />
-        </div>
-        <Button className="w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100">
-          Checkout (demo)
-        </Button>
-        <p className="text-xs text-slate-500 dark:text-slate-400">
-          Your cart is stored in the database and synced with TanStack Query.
-        </p>
-      </div>
+      <CartFooter subtotal={subtotal} shipping={shipping} total={total} />
     </div >
-  )
-}
-
-function SummaryRow({
-  label,
-  value,
-  bold,
-}: {
-  label: string
-  value: number
-  bold?: boolean
-}) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className={bold ? 'font-semibold' : ''}>{label}</span>
-      <span className={bold ? 'text-lg font-bold' : 'font-semibold'}>
-        ฿{value ? Number(value).toFixed() : 0}
-      </span>
-    </div>
   )
 }
